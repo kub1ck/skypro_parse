@@ -15,8 +15,8 @@ class Engine(ABC):
 
 
 class HH(Engine):
-    def __init__(self, url, *params):
-        self.url = url
+    def __init__(self, *params):
+        self.url = 'https://api.hh.ru/vacancies'
         self.params = {
             'text': params[0],
             'per_page': 20,
@@ -60,8 +60,8 @@ class HH(Engine):
 
 
 class Superjob(Engine):
-    def __init__(self, url, *params):
-        self.url = url
+    def __init__(self, *params):
+        self.url = 'https://russia.superjob.ru/vacancy'
         self.params = {
             'text': params[0],
             'page': params[1]
