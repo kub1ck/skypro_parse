@@ -15,6 +15,12 @@ def main():
     website = 'sj'
     parce_page(search_text, 2, website)
 
+    # Топ 10 по зп
+    vacancies = get_top10_salary()
+
+    for vacancy in vacancies:
+        print(vacancy)
+
 
 if __name__ == '__main__':
     main()

@@ -1,5 +1,4 @@
 import json
-from typing import Any
 from classes import *
 
 
@@ -9,8 +8,7 @@ def clean_json_file() -> None:
     """
 
     with open('result.json', 'w', encoding='utf-8') as file:
-        data = []
-        json.dump(data, file, ensure_ascii=False, indent=2)
+        json.dump([], file, ensure_ascii=False, indent=2)
 
 
 def update_json_file(res: list) -> None:
@@ -33,3 +31,8 @@ def parce_page(search_text: str, total_page: int, web: str) -> None:
     for page in (1, total_page+1):
         vacancies = HH(search_text, page) if web == 'hh' else Superjob(search_text, page)
         update_json_file(vacancies.get_formatted_data())
+
+
+def get_top10_salary():
+    with open('result.json', encoding='utf-8') as file:
+        return sorted(json.load(file), key=lambda v: v['salary'], reverse=True)[:10]
