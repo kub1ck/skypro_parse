@@ -86,9 +86,9 @@ class Superjob(Engine):
         for i in range(len(names_and_urls)):
             result_dict = {
                 'name': names_and_urls[i].text,
-                'url': 'russia.superjob.ru/' + names_and_urls[i].a['href'],
+                'url': 'https://russia.superjob.ru/' + names_and_urls[i].a['href'],
                 'salary': self.formate_salary(salaries[i].text),
-                'snippets': snippets[i].text
+                'snippet': snippets[i].text
             }
 
             result_list.append(result_dict.copy())
@@ -105,3 +105,17 @@ class Superjob(Engine):
             salary = re.sub(r"—\d+", "", salary)
 
         return int(salary)
+
+
+class Vacancy:
+    def __init__(self, vacancy):
+        self.name = vacancy['name']
+        self.url = vacancy['url']
+        self.snippet = vacancy['snippet']
+        self.salary = vacancy['salary']
+
+    def __repr__(self):
+        return f"\nНазвание вакансии: {self.name}\n" \
+               f"Ссылка на вакансию: {self.url}\n" \
+               f"Описание вакансии: {self.snippet}\n" \
+               f"Зарплата вакансии: {self.salary}"

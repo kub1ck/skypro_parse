@@ -19,7 +19,8 @@ def main():
     vacancies = get_top10_salary()
 
     for vacancy in vacancies:
-        print(vacancy)
+        vac = Vacancy(vacancy)
+        print(vac)
 
 
 if __name__ == '__main__':

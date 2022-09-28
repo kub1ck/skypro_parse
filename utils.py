@@ -33,6 +33,10 @@ def parce_page(search_text: str, total_page: int, web: str) -> None:
         update_json_file(vacancies.get_formatted_data())
 
 
-def get_top10_salary():
+def get_top10_salary() -> list:
+    """
+    Сортируем вакансии по зарплате и возвращаем топ 10 вакансий
+    """
+
     with open('result.json', encoding='utf-8') as file:
         return sorted(json.load(file), key=lambda v: v['salary'], reverse=True)[:10]
