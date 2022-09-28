@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import requests
 import re
+from bs4 import BeautifulSoup
 
 
 class Engine(ABC):
@@ -41,13 +42,10 @@ class HH(Engine):
 
     @staticmethod
     def formate_salary(salary):
-        if salary is None:
-            return [0, '']
+        if salary is None or salary['from'] is None:
+            return 0
 
-        if salary['from'] is None:
-            return [0, salary['currency']]
-
-        return [salary['from'], salary['currency']]
+        return salary['from']
 
     @staticmethod
     def formate_snippet(snippet):
@@ -59,3 +57,51 @@ class HH(Engine):
             result = snippet["requirement"] + ' ' + snippet["responsibility"]
 
         return re.sub(r"<highlighttext>|</highlighttext>", '', result)
+
+
+class Superjob(Engine):
+    def __init__(self, url, *params):
+        self.url = url
+        self.params = {
+            'text': params[0],
+            'page': params[1]
+        }
+
+    def get_request(self):
+        url = f'https://russia.superjob.ru/vacancy/search/?keywords={self.params["text"]}&page={self.params["page"]}'
+        return requests.get(url)
+
+    def get_formatted_data(self):
+        result_dict = {}
+        result_list = []
+
+        response = self.get_request()
+
+        soup = BeautifulSoup(response.text, 'lxml')
+
+        names_and_urls = soup.find_all('span', class_='_9fIP1 _249GZ _1jb_5 QLdOc')
+        salaries = soup.find_all('span', class_='_2eYAG _1nqY_ _249GZ _1jb_5 _1dIgi')
+        snippets = soup.find_all('span', class_='_1Nj4W _249GZ _1jb_5 _1dIgi _3qTky')
+
+        for i in range(len(names_and_urls)):
+            result_dict = {
+                'name': names_and_urls[i].text,
+                'url': 'russia.superjob.ru/' + names_and_urls[i].a['href'],
+                'salary': self.formate_salary(salaries[i].text),
+                'snippets': snippets[i].text
+            }
+
+            result_list.append(result_dict.copy())
+
+        return result_list
+
+    @staticmethod
+    def formate_salary(salary):
+        salary = re.sub(r"от | | до|до |руб.", "", salary)
+
+        if salary == "По договорённости":
+            salary = '0'
+        elif '—' in salary:
+            salary = re.sub(r"—\d+", "", salary)
+
+        return int(salary)
