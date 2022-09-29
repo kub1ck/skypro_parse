@@ -9,12 +9,12 @@ def main():
 
     # Парсим hh.ru
     website = 'hh'
-    print("Парсим хх...")
+    print("\nПарсим hh.ru...")
     parce_page(search_text, 10, website)
 
     # Парсим superjob.ru
     website = 'sj'
-    print("Парсим superjob...")
+    print("\nПарсим superjob.ru...")
     parce_page(search_text, 10, website)
 
     # Топ 10 по зп
