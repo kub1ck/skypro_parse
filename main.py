@@ -20,6 +20,7 @@ def main():
     # Топ 10 по зп
     vacancies = get_top10_salary()
 
+    print("\nТоп 10 вакансий по зарплате:")
     for vacancy in vacancies:
         vac = Vacancy(vacancy)
         print(vac)
