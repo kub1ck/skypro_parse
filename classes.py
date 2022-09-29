@@ -68,7 +68,7 @@ class Superjob(Engine):
         }
 
     def get_request(self):
-        url = f'https://russia.superjob.ru/vacancy/search/?keywords={self.params["text"]}&page={self.params["page"]}'
+        url = f'https://russia.superjob.ru/vacancy/search/?keywords={self.params["text"]}&order_by%5Bupdated_at%5D=desc&page={self.params["page"]}'
         return requests.get(url)
 
     def get_formatted_data(self):
@@ -81,7 +81,7 @@ class Superjob(Engine):
 
         names_and_urls = soup.find_all('span', class_='_9fIP1 _249GZ _1jb_5 QLdOc')
         salaries = soup.find_all('span', class_='_2eYAG _1nqY_ _249GZ _1jb_5 _1dIgi')
-        snippets = soup.find_all('span', class_='_1Nj4W _249GZ _1jb_5 _1dIgi _3qTky')
+        snippets = soup.find_all('div', class_='_2d_Of _2J-3z _3B5DQ')
 
         for i in range(len(names_and_urls)):
             result_dict = {
