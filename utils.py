@@ -28,9 +28,14 @@ def parce_page(search_text: str, total_page: int, web: str) -> None:
     Парсит каждую страницу на сайтах и проводит запись в файл
     """
 
-    for page in (1, total_page+1):
+    for page in range(1, total_page+1):
         vacancies = HH(search_text, page) if web == 'hh' else Superjob(search_text, page)
-        update_json_file(vacancies.get_formatted_data())
+        result = vacancies.get_formatted_data()
+        if not result:
+            break
+
+        print(f"Парсинг {page} страницы..")
+        update_json_file(result)
 
 
 def get_top10_salary() -> list:
