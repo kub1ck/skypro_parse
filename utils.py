@@ -1,5 +1,6 @@
 import json
 from classes import *
+from random import sample
 
 
 def clean_json_file() -> None:
@@ -38,10 +39,22 @@ def parce_page(search_text: str, total_page: int, web: str) -> None:
         update_json_file(result)
 
 
-def get_top10_salary() -> list:
+def get_top10_salary(data: list) -> list:
     """
     Сортируем вакансии по зарплате и возвращаем топ 10 вакансий
     """
 
+    return sorted(data, key=lambda v: v['salary'], reverse=True)[:10]
+
+
+def get_random_vacancies(data: list, total: int) -> list:
+    """
+    Возвращает рандомные вакансии в количестве total
+    """
+
+    return sample(data, total)
+
+
+def get_data() -> list:
     with open('result.json', encoding='utf-8') as file:
-        return sorted(json.load(file), key=lambda v: v['salary'], reverse=True)[:10]
+        return json.load(file)
